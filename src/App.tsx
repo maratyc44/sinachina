@@ -63,7 +63,8 @@ export default function App() {
   const [province, setProvince] = useState('Любая');
   const [budgetType, setBudgetType] = useState<'select' | 'gpa' | 'age' | 'custom'>('select');
   const [budget, setBudget] = useState('Любой');
-  const [customBudget, setCustomBudget] = useState('');
+  const [budgetMin, setBudgetMin] = useState('');
+  const [budgetMax, setBudgetMax] = useState('');
   const [difficulty, setDifficulty] = useState('Любая');
 
   // Профиль
@@ -111,15 +112,19 @@ export default function App() {
         } else if (budget === 'Старше 30') {
           if (age <= 30) return false;
         }
-      } else if (budgetType === 'custom' && customBudget) {
-        // Ручной ввод бюджета
-        const maxBudget = parseInt(customBudget);
-        if (!isNaN(maxBudget) && uni.costBachelorCNY * CNY_TO_RUB > maxBudget) return false;
+      } else if (budgetType === 'custom') {
+        // Ручной ввод бюджета от/до
+        const minBudget = budgetMin ? parseInt(budgetMin) : 0;
+        const maxBudget = budgetMax ? parseInt(budgetMax) : Infinity;
+        const uniCost = uni.costBachelorCNY * CNY_TO_RUB;
+        
+        if (!isNaN(minBudget) && uniCost < minBudget) return false;
+        if (!isNaN(maxBudget) && uniCost > maxBudget) return false;
       }
       
       return true;
     });
-  }, [specialty, city, province, budgetType, budget, customBudget, difficulty, age]);
+  }, [specialty, city, province, budgetType, budget, budgetMin, budgetMax, difficulty, age]);
 
   const handleChatSend = () => {
     if (!chatInput.trim()) return;
@@ -369,16 +374,55 @@ export default function App() {
                   )}
                   
                   {budgetType === 'custom' && (
-                    <div>
-                      <label className="text-sm text-gray-600">Максимальный бюджет (₽/год)</label>
-                      <input
-                        type="number"
-                        value={customBudget}
-                        onChange={e => setCustomBudget(e.target.value)}
-                        placeholder="Например: 400000"
-                        className="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-red-200 outline-none"
-                      />
-                    </div>
+                    <>
+                      <div>
+                        <label className="text-sm text-gray-600">Бюджет от (₽/год)</label>
+                        <input
+                          type="number"
+                          value={budgetMin}
+                          onChange={e => setBudgetMin(e.target.value)}
+                          placeholder="Например: 100000"
+                          className="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-red-200 outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm text-gray-600">Бюджет до (₽/год)</label>
+                        <input
+                          type="number"
+                          value={budgetMax}
+                          onChange={e => setBudgetMax(e.target.value)}
+                          placeholder="Например: 500000"
+                          className="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-red-200 outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm text-gray-600">Или выберите готовый диапазон</label>
+                        <select
+                          onChange={e => {
+                            const value = e.target.value;
+                            if (value === '') {
+                              setBudgetMin('');
+                              setBudgetMax('');
+                            } else {
+                              const [min, max] = value.split('-');
+                              setBudgetMin(min);
+                              setBudgetMax(max);
+                            }
+                          }}
+                          className="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-red-200 outline-none"
+                        >
+                          <option value="">Выбрать диапазон</option>
+                          <option value="100000-150000">100 000 - 150 000 ₽</option>
+                          <option value="150000-200000">150 000 - 200 000 ₽</option>
+                          <option value="200000-250000">200 000 - 250 000 ₽</option>
+                          <option value="250000-300000">250 000 - 300 000 ₽</option>
+                          <option value="300000-350000">300 000 - 350 000 ₽</option>
+                          <option value="350000-400000">350 000 - 400 000 ₽</option>
+                          <option value="400000-450000">400 000 - 450 000 ₽</option>
+                          <option value="450000-500000">450 000 - 500 000 ₽</option>
+                        </select>
+                      </div>
+                    </>
                   )}
                   <div>
                     <label className="text-sm text-gray-600">Сложность</label>
