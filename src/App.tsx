@@ -50,6 +50,7 @@ export default function App() {
   // Фильтры
   const [specialty, setSpecialty] = useState('');
   const [city, setCity] = useState('Любой');
+  const [province, setProvince] = useState('Любая');
   const [budget, setBudget] = useState('Любой');
   const [difficulty, setDifficulty] = useState('Любая');
 
@@ -68,6 +69,7 @@ export default function App() {
     return universities.filter(uni => {
       if (specialty && !uni.specialties.some(s => s.toLowerCase().includes(specialty.toLowerCase()))) return false;
       if (city !== 'Любой' && uni.cityRu !== city) return false;
+      if (province !== 'Любая' && uni.province !== province) return false;
       if (difficulty !== 'Любая' && uni.difficultyCategory !== difficulty) return false;
       if (budget === 'До 300 000 ₽') {
         if (uni.costBachelorCNY * CNY_TO_RUB > 300000) return false;
@@ -76,7 +78,7 @@ export default function App() {
       }
       return true;
     });
-  }, [specialty, city, budget, difficulty]);
+  }, [specialty, city, province, budget, difficulty]);
 
   const handleChatSend = () => {
     if (!chatInput.trim()) return;
@@ -108,7 +110,7 @@ export default function App() {
     }, 1000);
   };
 
-  const cities = ['Любой', 'Пекин', 'Ханчжоу', 'Ухань', 'Харбин', 'Сямынь', 'Гуанчжоу', 'Чжэньцзян'];
+  const cities = ['Любой', 'Пекин', 'Шанхай', 'Ханчжоу', 'Нанкин', 'Ухань', 'Харбин', 'Сямынь', 'Гуанчжоу', 'Шэньчжэнь', 'Чэнду', 'Сиань', 'Тяньцзинь', 'Цзинань', 'Циндао', 'Шэньян', 'Далянь', 'Чанша', 'Кайфын', 'Хэфэй', 'Куньмин', 'Наньнин', 'Чанчунь', 'Ланьчжоу', 'Гуйян', 'Хайкоу', 'Фучжоу', 'Чжэньцзян'];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-amber-50">
@@ -240,6 +242,37 @@ export default function App() {
                     />
                   </div>
                   <div>
+                    <label className="text-sm text-gray-600">Провинция</label>
+                    <select
+                      value={province} onChange={e => setProvince(e.target.value)}
+                      className="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-red-200 outline-none"
+                    >
+                      <option>Любая</option>
+                      <option>Пекин</option>
+                      <option>Шанхай</option>
+                      <option>Тяньцзинь</option>
+                      <option>Чжэцзян</option>
+                      <option>Цзянсу</option>
+                      <option>Гуандун</option>
+                      <option>Фуцзянь</option>
+                      <option>Хубэй</option>
+                      <option>Хэйлунцзян</option>
+                      <option>Шэньси</option>
+                      <option>Шаньдун</option>
+                      <option>Ляонин</option>
+                      <option>Хунань</option>
+                      <option>Хэнань</option>
+                      <option>Аньхой</option>
+                      <option>Сычуань</option>
+                      <option>Юньнань</option>
+                      <option>Гуанси</option>
+                      <option>Цзилинь</option>
+                      <option>Ганьсу</option>
+                      <option>Гуйчжоу</option>
+                      <option>Хайнань</option>
+                    </select>
+                  </div>
+                  <div>
                     <label className="text-sm text-gray-600">Город</label>
                     <select
                       value={city} onChange={e => setCity(e.target.value)}
@@ -287,12 +320,12 @@ export default function App() {
                     <div className="text-xs text-gray-600">Вузов найдено</div>
                   </div>
                   <div className="bg-blue-50 rounded-lg p-3 text-center">
-                    <div className="text-2xl font-bold text-blue-700">4</div>
-                    <div className="text-xs text-gray-600">Типа грантов</div>
+                    <div className="text-2xl font-bold text-blue-700">22</div>
+                    <div className="text-xs text-gray-600">Провинции</div>
                   </div>
                   <div className="bg-green-50 rounded-lg p-3 text-center">
-                    <div className="text-2xl font-bold text-green-700">12,5</div>
-                    <div className="text-xs text-gray-600">Курс ¥/₽</div>
+                    <div className="text-2xl font-bold text-green-700">4</div>
+                    <div className="text-xs text-gray-600">Типа грантов</div>
                   </div>
                   <div className="bg-purple-50 rounded-lg p-3 text-center">
                     <div className="text-2xl font-bold text-purple-700">1+4</div>
