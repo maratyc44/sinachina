@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { universities, grants, documents, timeline, CNY_TO_RUB, University } from './data/universities';
 import { c9Universities, project985Universities, project211Universities, categoryInfo, findEliteUniversityInMainDb } from './data/elite-universities';
+import { getUniversityLocation, getGoogleMapsEmbedUrl } from './data/locations';
 
 // ===== УТИЛИТЫ =====
 function toRub(cny: number): string {
@@ -465,6 +466,37 @@ export default function App() {
               </div>
 
               <div className="p-6 space-y-6">
+                {/* Фото и карта */}
+                {(() => {
+                  const location = getUniversityLocation(selectedUni.id);
+                  if (location) {
+                    return (
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div className="rounded-lg overflow-hidden border border-gray-200">
+                          <img 
+                            src={location.image} 
+                            alt={selectedUni.name}
+                            className="w-full h-64 object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src = `https://source.unsplash.com/800x400/?university,china,campus`;
+                            }}
+                          />
+                        </div>
+                        <div className="rounded-lg overflow-hidden border border-gray-200">
+                          <iframe
+                            title={`Карта ${selectedUni.name}`}
+                            src={getGoogleMapsEmbedUrl(location.lat, location.lng)}
+                            className="w-full h-64 border-0"
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                          ></iframe>
+                        </div>
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
+
                 {/* Статистика */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   <div className="bg-gray-50 rounded-lg p-4 text-center">

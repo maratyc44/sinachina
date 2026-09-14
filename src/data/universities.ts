@@ -33,6 +33,9 @@ export interface University {
   compatriots: string;
   internet: string;
   partTime: string;
+  latitude?: number;
+  longitude?: number;
+  imageUrl?: string;
 }
 
 export const universities: University[] = [
