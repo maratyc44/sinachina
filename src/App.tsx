@@ -113,33 +113,27 @@ export default function App() {
   const cities = ['Любой', 'Пекин', 'Шанхай', 'Ханчжоу', 'Нанкин', 'Сучжоу', 'Уси', 'Чанчжоу', 'Янчжоу', 'Наньтун', 'Хуайань', 'Яньчэн', 'Чаншу', 'Сюйчжоу', 'Тайчжоу', 'Ляньюньган', 'Ухань', 'Харбин', 'Сямынь', 'Гуанчжоу', 'Шэньчжэнь', 'Чэнду', 'Чунцин', 'Лешань', 'Ибинь', 'Цзигун', 'Мяньян', 'Лучжоу', 'Яань', 'Наньчун', 'Нэйцзян', 'Суйнин', 'Паньчжихуа', 'Дачжоу', 'Сиань', 'Тяньцзинь', 'Цзинань', 'Циндао', 'Шэньян', 'Далянь', 'Чанша', 'Сянтань', 'Кайфын', 'Хэфэй', 'Куньмин', 'Наньнин', 'Гуйлинь', 'Чанчунь', 'Яньцзи', 'Ланьчжоу', 'Гуйян', 'Хайкоу', 'Фучжоу', 'Чжэньцзян', 'Фушунь', 'Аньшань', 'Хулудао', 'Цзиньчжоу', 'Даньдун', 'Баодин', 'Шицзячжуан', 'Тайюань', 'Хух-Хото', 'Синин', 'Иньчуань', 'Урумчи'];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-amber-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Шапка */}
-      <header className="bg-white/80 backdrop-blur-md border-b border-red-100 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-red-700 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
-              🎓
-            </div>
-            <div>
-              <h1 className="text-lg font-bold text-gray-900">ИИ-Поиск вузов Китая</h1>
-              <p className="text-xs text-gray-500">Поиск университетов и грантов • Программа 1+4</p>
-            </div>
+            <h1 className="text-xl font-semibold text-gray-900">Поиск вузов Китая</h1>
           </div>
-          <nav className="hidden md:flex gap-1">
+          <nav className="hidden md:flex gap-2">
             {[
-              { id: 'search', label: '🔍 Поиск' },
-              { id: 'grants', label: '🎓 Гранты' },
-              { id: 'documents', label: '📋 Документы' },
-              { id: 'timeline', label: '🗓️ План' },
-              { id: 'chat', label: '🤖 ИИ-чат' },
+              { id: 'search', label: 'Поиск' },
+              { id: 'grants', label: 'Гранты' },
+              { id: 'documents', label: 'Документы' },
+              { id: 'timeline', label: 'План' },
+              { id: 'chat', label: 'ИИ-чат' },
             ].map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as typeof activeTab)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                   activeTab === tab.id
-                    ? 'bg-red-100 text-red-800 shadow-sm'
+                    ? 'bg-gray-900 text-white'
                     : 'text-gray-600 hover:bg-gray-100'
                 }`}
               >
@@ -151,18 +145,18 @@ export default function App() {
         {/* Мобильная навигация */}
         <div className="md:hidden flex gap-1 px-4 pb-2 overflow-x-auto">
           {[
-            { id: 'search', label: '🔍 Поиск' },
-            { id: 'grants', label: '🎓 Гранты' },
-            { id: 'documents', label: '📋' },
-            { id: 'timeline', label: '🗓️' },
-            { id: 'chat', label: '🤖 ИИ' },
+            { id: 'search', label: 'Поиск' },
+            { id: 'grants', label: 'Гранты' },
+            { id: 'documents', label: 'Документы' },
+            { id: 'timeline', label: 'План' },
+            { id: 'chat', label: 'ИИ-чат' },
           ].map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as typeof activeTab)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
                 activeTab === tab.id
-                  ? 'bg-red-100 text-red-800'
+                  ? 'bg-gray-900 text-white'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
@@ -176,24 +170,17 @@ export default function App() {
         {/* ===== ВКЛАДКА ПОИСК ===== */}
         {activeTab === 'search' && !selectedUni && (
           <div>
-            {/* Герой */}
-            <div className="bg-gradient-to-r from-red-600 to-red-800 rounded-2xl p-6 md:p-10 text-white mb-8 shadow-xl">
-              <h2 className="text-2xl md:text-4xl font-bold mb-3">🇨🇳 Поступление в Китай</h2>
-              <p className="text-red-100 text-lg mb-4">Программы 1+4 для иностранцев без знания китайского</p>
-              <div className="flex flex-wrap gap-4 text-sm">
-                <div className="bg-white/20 rounded-lg px-4 py-2">📚 1 год китайского → HSK 4</div>
-                <div className="bg-white/20 rounded-lg px-4 py-2">🎓 4 года бакалавриата</div>
-                <div className="bg-white/20 rounded-lg px-4 py-2">💰 Гранты до 100%</div>
-              </div>
+            {/* Заголовок */}
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">Поступление в Китай</h2>
+              <p className="text-gray-600">Программы 1+4 для иностранцев без знания китайского • 1 год языка + 4 года бакалавриата</p>
             </div>
 
             {/* Профиль и фильтры */}
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               {/* Профиль */}
-              <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                  👤 Ваш профиль
-                </h3>
+              <div className="bg-white rounded-xl p-5 border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-4">Ваш профиль</h3>
                 <div className="space-y-4">
                   <div>
                     <label className="text-sm text-gray-600">Средний балл (из 5.0): <span className="font-bold text-red-600">{gpa}</span></label>
@@ -228,10 +215,8 @@ export default function App() {
               </div>
 
               {/* Фильтры */}
-              <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                  🔍 Фильтры
-                </h3>
+              <div className="bg-white rounded-xl p-5 border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-4">Фильтры</h3>
                 <div className="space-y-3">
                   <div>
                     <label className="text-sm text-gray-600">Специальность</label>
@@ -310,39 +295,24 @@ export default function App() {
               </div>
 
               {/* Быстрая статистика */}
-              <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                  📊 Быстрая статистика
-                </h3>
+              <div className="bg-white rounded-xl p-5 border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-4">Статистика</h3>
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-red-50 rounded-lg p-3 text-center">
-                    <div className="text-2xl font-bold text-red-700">{filteredUnis.length}</div>
-                    <div className="text-xs text-gray-600">Вузов найдено</div>
+                  <div className="bg-gray-50 rounded-lg p-3 text-center">
+                    <div className="text-2xl font-bold text-gray-900">{filteredUnis.length}</div>
+                    <div className="text-xs text-gray-500">Найдено</div>
                   </div>
-                  <div className="bg-blue-50 rounded-lg p-3 text-center">
-                    <div className="text-2xl font-bold text-blue-700">22</div>
-                    <div className="text-xs text-gray-600">Провинции</div>
+                  <div className="bg-gray-50 rounded-lg p-3 text-center">
+                    <div className="text-2xl font-bold text-gray-900">143</div>
+                    <div className="text-xs text-gray-500">Всего вузов</div>
                   </div>
-                  <div className="bg-green-50 rounded-lg p-3 text-center">
-                    <div className="text-2xl font-bold text-green-700">143</div>
-                    <div className="text-xs text-gray-600">Всего вузов</div>
-                  </div>
-                  <div className="bg-purple-50 rounded-lg p-3 text-center">
-                    <div className="text-2xl font-bold text-purple-700">22</div>
-                    <div className="text-xs text-gray-600">Вузов в Ляонине</div>
-                  </div>
-                </div>
-                <div className="mt-4 p-3 bg-amber-50 rounded-lg border border-amber-200">
-                  <p className="text-xs text-amber-800">
-                    💡 <strong>Совет:</strong> Подавайтесь на CSC + CIS + Провинциальный одновременно — это увеличивает шанс гранта в 3 раза.
-                  </p>
                 </div>
               </div>
             </div>
 
             {/* Карточки университетов */}
-            <h3 className="text-xl font-bold text-gray-800 mb-4">
-              🏛️ Найденные университеты ({filteredUnis.length})
+            <h3 className="text-xl font-bold text-gray-900 mb-4">
+              Университеты ({filteredUnis.length})
             </h3>
             <div className="grid md:grid-cols-2 gap-4">
               {filteredUnis.map(uni => {
@@ -351,11 +321,11 @@ export default function App() {
                   <div
                     key={uni.id}
                     onClick={() => setSelectedUni(uni)}
-                    className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:shadow-lg hover:border-red-200 transition-all cursor-pointer group"
+                    className="bg-white rounded-xl p-5 border border-gray-200 hover:border-gray-400 transition-all cursor-pointer"
                   >
                     <div className="flex justify-between items-start mb-3">
                       <div>
-                        <h4 className="font-bold text-gray-900 group-hover:text-red-700 transition-colors">{uni.name}</h4>
+                        <h4 className="font-semibold text-gray-900">{uni.name}</h4>
                         <p className="text-sm text-gray-500">{uni.nameZh} • {uni.cityRu}</p>
                       </div>
                       <span className={`text-xs px-2 py-1 rounded-full border ${getDifficultyColor(uni.difficultyCategory)}`}>
@@ -365,28 +335,31 @@ export default function App() {
 
                     <div className="grid grid-cols-3 gap-2 mb-3">
                       <div className="text-center bg-gray-50 rounded-lg p-2">
-                        <div className="text-sm font-bold text-gray-800">{uni.costBachelorCNY.toLocaleString()} ¥</div>
+                        <div className="text-sm font-semibold text-gray-900">{uni.costBachelorCNY.toLocaleString()} ¥</div>
                         <div className="text-xs text-gray-500">{toRub(uni.costBachelorCNY)} ₽/год</div>
                       </div>
                       <div className="text-center bg-gray-50 rounded-lg p-2">
-                        <div className="text-sm font-bold text-gray-800">{uni.competition}:1</div>
+                        <div className="text-sm font-semibold text-gray-900">{uni.competition}:1</div>
                         <div className="text-xs text-gray-500">конкурс</div>
                       </div>
                       <div className="text-center bg-gray-50 rounded-lg p-2">
-                        <div className={`text-sm font-bold ${getChanceColor(chance)}`}>{chance}%</div>
-                        <div className="text-xs text-gray-500">ваш шанс</div>
+                        <div className={`text-sm font-semibold ${getChanceColor(chance)}`}>{chance}%</div>
+                        <div className="text-xs text-gray-500">шанс</div>
                       </div>
                     </div>
 
                     <div className="flex flex-wrap gap-1 mb-3">
-                      {uni.specialties.map(s => (
-                        <span key={s} className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">{s}</span>
+                      {uni.specialties.slice(0, 4).map(s => (
+                        <span key={s} className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded">{s}</span>
                       ))}
+                      {uni.specialties.length > 4 && (
+                        <span className="text-xs text-gray-500">+{uni.specialties.length - 4}</span>
+                      )}
                     </div>
 
                     <div className="flex items-center justify-between text-xs text-gray-500">
-                      <span>📅 CSC: {uni.deadlineCSC}</span>
-                      <span className="text-red-600 font-medium">Подробнее →</span>
+                      <span>Дедлайн: {uni.deadlineCSC}</span>
+                      <span className="text-gray-900 font-medium">Подробнее →</span>
                     </div>
                   </div>
                 );
@@ -394,8 +367,8 @@ export default function App() {
             </div>
             {filteredUnis.length === 0 && (
               <div className="text-center py-12 text-gray-500">
-                <p className="text-4xl mb-3">🔍</p>
-                <p>По вашим фильтрам ничего не найдено. Попробуйте расширить критерии.</p>
+                <p className="text-lg mb-2">Ничего не найдено</p>
+                <p className="text-sm">Попробуйте расширить критерии поиска.</p>
               </div>
             )}
           </div>
@@ -406,23 +379,23 @@ export default function App() {
           <div>
             <button
               onClick={() => setSelectedUni(null)}
-              className="mb-4 text-red-600 hover:text-red-800 font-medium text-sm flex items-center gap-1"
+              className="mb-4 text-gray-600 hover:text-gray-900 font-medium text-sm"
             >
               ← Назад к списку
             </button>
 
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
               {/* Заголовок */}
-              <div className="bg-gradient-to-r from-red-600 to-red-800 p-6 text-white">
+              <div className="p-6 border-b border-gray-200">
                 <div className="flex justify-between items-start">
                   <div>
-                    <h2 className="text-2xl font-bold">{selectedUni.name}</h2>
-                    <p className="text-red-200">{selectedUni.nameZh} • {selectedUni.cityRu}</p>
-                    <p className="text-red-100 text-sm mt-1">{selectedUni.type}</p>
+                    <h2 className="text-2xl font-bold text-gray-900">{selectedUni.name}</h2>
+                    <p className="text-gray-500 mt-1">{selectedUni.nameZh} • {selectedUni.cityRu}</p>
+                    <p className="text-gray-600 text-sm mt-1">{selectedUni.type}</p>
                   </div>
                   <div className="text-right">
-                    <div className="text-3xl font-bold">QS №{typeof selectedUni.qsRanking === 'number' ? selectedUni.qsRanking : '—'}</div>
-                    <span className="text-xs px-2 py-1 rounded-full bg-white/20">
+                    <div className="text-2xl font-bold text-gray-900">QS №{typeof selectedUni.qsRanking === 'number' ? selectedUni.qsRanking : '—'}</div>
+                    <span className={`text-xs px-2 py-1 rounded-full border mt-2 inline-block ${getDifficultyColor(selectedUni.difficultyCategory)}`}>
                       {getDifficultyLabel(selectedUni.difficultyCategory)}
                     </span>
                   </div>
@@ -432,27 +405,27 @@ export default function App() {
               <div className="p-6 space-y-6">
                 {/* Статистика */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  <div className="bg-red-50 rounded-xl p-4 text-center">
-                    <div className="text-2xl font-bold text-red-700">{selectedUni.competition}:1</div>
-                    <div className="text-xs text-gray-600">Конкурс</div>
+                  <div className="bg-gray-50 rounded-lg p-4 text-center">
+                    <div className="text-2xl font-bold text-gray-900">{selectedUni.competition}:1</div>
+                    <div className="text-xs text-gray-500">Конкурс</div>
                   </div>
-                  <div className="bg-blue-50 rounded-xl p-4 text-center">
-                    <div className="text-2xl font-bold text-blue-700">{selectedUni.acceptanceRate}%</div>
-                    <div className="text-xs text-gray-600">Принятых</div>
+                  <div className="bg-gray-50 rounded-lg p-4 text-center">
+                    <div className="text-2xl font-bold text-gray-900">{selectedUni.acceptanceRate}%</div>
+                    <div className="text-xs text-gray-500">Принятых</div>
                   </div>
-                  <div className="bg-green-50 rounded-xl p-4 text-center">
-                    <div className="text-2xl font-bold text-green-700">{selectedUni.hskPassRate}%</div>
-                    <div className="text-xs text-gray-600">Сдают HSK 4</div>
+                  <div className="bg-gray-50 rounded-lg p-4 text-center">
+                    <div className="text-2xl font-bold text-gray-900">{selectedUni.hskPassRate}%</div>
+                    <div className="text-xs text-gray-500">Сдают HSK 4</div>
                   </div>
-                  <div className="bg-purple-50 rounded-xl p-4 text-center">
-                    <div className="text-2xl font-bold text-purple-700">{calculateChance(selectedUni, gpa, age, hasHsk)}%</div>
-                    <div className="text-xs text-gray-600">Ваш шанс</div>
+                  <div className="bg-gray-50 rounded-lg p-4 text-center">
+                    <div className={`text-2xl font-bold ${getChanceColor(calculateChance(selectedUni, gpa, age, hasHsk))}`}>{calculateChance(selectedUni, gpa, age, hasHsk)}%</div>
+                    <div className="text-xs text-gray-500">Ваш шанс</div>
                   </div>
                 </div>
 
                 {/* Финансы */}
                 <div>
-                  <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">💰 Финансы (взгляд родителя)</h3>
+                  <h3 className="font-bold text-gray-900 mb-3">Финансы</h3>
                   <div className="bg-gray-50 rounded-xl p-4">
                     <table className="w-full text-sm">
                       <tbody>
@@ -495,7 +468,7 @@ export default function App() {
 
                 {/* Жизнь студента */}
                 <div>
-                  <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">🎒 Жизнь студента (взгляд абитуриента)</h3>
+                  <h3 className="font-bold text-gray-900 mb-3">Жизнь студента</h3>
                   <div className="grid md:grid-cols-2 gap-3">
                     <div className="bg-blue-50 rounded-lg p-3">
                       <p className="text-sm font-medium text-blue-800">🏙️ Город:</p>
@@ -522,7 +495,7 @@ export default function App() {
 
                 {/* Гранты */}
                 <div>
-                  <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">🎯 Гранты и дедлайны</h3>
+                  <h3 className="font-bold text-gray-900 mb-3">Гранты и дедлайны</h3>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between bg-yellow-50 rounded-lg p-3">
                       <span className="text-sm font-medium">CSC Тип А: {selectedUni.grantCSC}</span>
@@ -541,7 +514,7 @@ export default function App() {
 
                 {/* Анализ шансов */}
                 <div>
-                  <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">📊 Анализ шансов</h3>
+                  <h3 className="font-bold text-gray-900 mb-3">Анализ шансов</h3>
                   <div className="bg-gray-50 rounded-xl p-4">
                     <div className="grid grid-cols-2 gap-4 mb-4">
                       <div>
@@ -580,15 +553,15 @@ export default function App() {
 
                 {/* Документы */}
                 <div>
-                  <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">📋 Документы</h3>
+                  <h3 className="font-bold text-gray-900 mb-3">Документы</h3>
                   <p className="text-sm text-gray-600 mb-2">{selectedUni.documents}</p>
                 </div>
 
                 {/* Риски */}
                 <div>
-                  <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">⚠️ Риски и предупреждения</h3>
-                  <div className="bg-red-50 border border-red-200 rounded-xl p-4 space-y-2 text-sm text-red-800">
-                    <p>• Не сдал ХСКЬ 4 после года → отчисление или отправка домой</p>
+                  <h3 className="font-bold text-gray-900 mb-3">Риски</h3>
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 space-y-2 text-sm text-gray-700">
+                    <p>• Не сдал HSK 4 после года → отчисление или отправка домой</p>
                     <p>• Грант CIS на 1 год НЕ гарантирует продление на бакалавриат</p>
                     <p>• Конкурс: {selectedUni.competition} человек на место</p>
                     {selectedUni.difficultyCategory === 'EXTREMELY_HARD' && (
@@ -605,9 +578,9 @@ export default function App() {
                   href={selectedUni.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-red-700 transition-colors shadow-lg"
+                  className="inline-block bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors"
                 >
-                  🔗 Открыть сайт университета
+                  Открыть сайт университета →
                 </a>
               </div>
             </div>
@@ -617,20 +590,16 @@ export default function App() {
         {/* ===== ВКЛАДКА ГРАНТЫ ===== */}
         {activeTab === 'grants' && (
           <div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">🎓 Гранты для обучения в Китае</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Гранты для обучения в Китае</h2>
             <div className="grid md:grid-cols-2 gap-4">
               {grants.map((grant, i) => (
-                <div key={i} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <div key={i} className="bg-white rounded-xl p-6 border border-gray-200">
                   <div className="flex items-start justify-between mb-3">
                     <div>
                       <h3 className="font-bold text-gray-900">{grant.name}</h3>
                       <p className="text-sm text-gray-500">{grant.nameRu}</p>
                     </div>
-                    <span className={`text-xs px-2 py-1 rounded-full ${
-                      grant.competition === 'Очень высокий' ? 'bg-red-100 text-red-700' :
-                      grant.competition === 'Средний' ? 'bg-yellow-100 text-yellow-700' :
-                      'bg-green-100 text-green-700'
-                    }`}>
+                    <span className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-700">
                       {grant.competition}
                     </span>
                   </div>
@@ -641,11 +610,11 @@ export default function App() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Стипендия:</span>
-                      <span className="font-medium text-green-700">{grant.stipend}</span>
+                      <span className="font-medium text-gray-900">{grant.stipend}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Дедлайн:</span>
-                      <span className="font-medium text-red-600">{grant.deadline}</span>
+                      <span className="font-medium text-gray-900">{grant.deadline}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Куда подавать:</span>
@@ -658,8 +627,8 @@ export default function App() {
             </div>
 
             {/* Таблица сравнения */}
-            <div className="mt-8 bg-white rounded-xl p-6 shadow-sm border border-gray-100 overflow-x-auto">
-              <h3 className="font-bold text-gray-800 mb-4">📊 Сравнение грантов</h3>
+            <div className="mt-8 bg-white rounded-xl p-6 border border-gray-200 overflow-x-auto">
+              <h3 className="font-bold text-gray-900 mb-4">Сравнение грантов</h3>
               <table className="w-full text-sm min-w-[600px]">
                 <thead>
                   <tr className="border-b-2 border-gray-200">
@@ -690,9 +659,9 @@ export default function App() {
                   </tr>
                   <tr className="border-b border-gray-100">
                     <td className="py-2 px-3 text-gray-600">Конкурс</td>
-                    <td className="py-2 px-3 text-center text-red-600 font-bold">Очень высокий</td>
-                    <td className="py-2 px-3 text-center text-yellow-600 font-bold">Средний</td>
-                    <td className="py-2 px-3 text-center text-green-600 font-bold">Ниже</td>
+                    <td className="py-2 px-3 text-center font-semibold">Очень высокий</td>
+                    <td className="py-2 px-3 text-center font-semibold">Средний</td>
+                    <td className="py-2 px-3 text-center font-semibold">Ниже</td>
                   </tr>
                   <tr>
                     <td className="py-2 px-3 text-gray-600">Лучше для</td>
@@ -709,33 +678,33 @@ export default function App() {
         {/* ===== ВКЛАДКА ДОКУМЕНТЫ ===== */}
         {activeTab === 'documents' && (
           <div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">📋 Документы для поступления</h2>
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Документы для поступления</h2>
+            <div className="bg-white rounded-xl p-6 border border-gray-200">
               <div className="space-y-3">
                 {documents.map((doc, i) => (
-                  <div key={i} className={`flex items-start gap-3 p-4 rounded-lg border ${doc.required ? 'bg-white border-gray-200' : 'bg-gray-50 border-gray-100'}`}>
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${doc.required ? 'bg-red-100 text-red-700' : 'bg-gray-200 text-gray-600'}`}>
+                  <div key={i} className="flex items-start gap-3 p-4 rounded-lg border border-gray-200">
+                    <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 bg-gray-100 text-gray-700">
                       {doc.required ? '✓' : '?'}
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-gray-800">{doc.name}</p>
+                      <p className="font-medium text-gray-900">{doc.name}</p>
                       <p className="text-sm text-gray-500">{doc.note}</p>
                     </div>
-                    <span className={`text-xs px-2 py-1 rounded-full shrink-0 ${doc.required ? 'bg-red-100 text-red-700' : 'bg-gray-200 text-gray-600'}`}>
+                    <span className="text-xs px-2 py-1 rounded-full shrink-0 bg-gray-100 text-gray-700">
                       {doc.required ? 'Обязательно' : 'По ситуации'}
                     </span>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
-                <h4 className="font-bold text-amber-800 mb-2">⚠️ Важные нюансы:</h4>
-                <ul className="text-sm text-amber-700 space-y-1">
-                  <li>• Переводы должны быть <strong>нотариальными</strong></li>
+              <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                <h4 className="font-bold text-gray-900 mb-2">Важные нюансы:</h4>
+                <ul className="text-sm text-gray-700 space-y-1">
+                  <li>• Переводы должны быть нотариальными</li>
                   <li>• Апостиль ставится на оригинал документа</li>
                   <li>• Медсправка — специальная форма (Foreigner Physical Examination Form)</li>
-                  <li>• Закладывайте <strong>2–3 недели</strong> на подготовку всех документов</li>
-                  <li>• Фото должно быть на <strong>белом фоне</strong>, 4×6 см</li>
+                  <li>• Закладывайте 2–3 недели на подготовку всех документов</li>
+                  <li>• Фото должно быть на белом фоне, 4×6 см</li>
                 </ul>
               </div>
             </div>
@@ -745,36 +714,36 @@ export default function App() {
         {/* ===== ВКЛАДКА ПЛАН ===== */}
         {activeTab === 'timeline' && (
           <div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">🗓️ Пошаговый план поступления</h2>
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Пошаговый план поступления</h2>
+            <div className="bg-white rounded-xl p-6 border border-gray-200">
               <div className="relative">
-                <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-red-200"></div>
-                <div className="space-y-6">
+                <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-200"></div>
+                <div className="space-y-4">
                   {timeline.map((item, i) => (
                     <div key={i} className="relative flex items-start gap-4 pl-2">
-                      <div className="w-10 h-10 bg-red-100 border-2 border-red-300 rounded-full flex items-center justify-center text-lg z-10 shrink-0">
+                      <div className="w-10 h-10 bg-white border-2 border-gray-300 rounded-full flex items-center justify-center text-lg z-10 shrink-0">
                         {item.icon}
                       </div>
                       <div className="bg-gray-50 rounded-lg p-4 flex-1">
-                        <p className="font-bold text-red-700 text-sm">{item.month}</p>
-                        <p className="text-gray-800">{item.task}</p>
+                        <p className="font-semibold text-gray-900 text-sm">{item.month}</p>
+                        <p className="text-gray-700">{item.task}</p>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="mt-8 p-4 bg-green-50 border border-green-200 rounded-xl">
-                <h4 className="font-bold text-green-800 mb-2">✅ Чек-лист готовности:</h4>
-                <div className="grid md:grid-cols-2 gap-2 text-sm text-green-700">
-                  <label className="flex items-center gap-2"><input type="checkbox" className="accent-green-600" /> Начал учить китайский</label>
-                  <label className="flex items-center gap-2"><input type="checkbox" className="accent-green-600" /> Собрал аттестат/диплом</label>
-                  <label className="flex items-center gap-2"><input type="checkbox" className="accent-green-600" /> Заказал переводы</label>
-                  <label className="flex items-center gap-2"><input type="checkbox" className="accent-green-600" /> Поставил апостиль</label>
-                  <label className="flex items-center gap-2"><input type="checkbox" className="accent-green-600" /> Получил рекомендации</label>
-                  <label className="flex items-center gap-2"><input type="checkbox" className="accent-green-600" /> Написал мотивационное письмо</label>
-                  <label className="flex items-center gap-2"><input type="checkbox" className="accent-green-600" /> Прошёл медосмотр</label>
-                  <label className="flex items-center gap-2"><input type="checkbox" className="accent-green-600" /> Получил справку о несудимости</label>
+              <div className="mt-8 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                <h4 className="font-bold text-gray-900 mb-2">Чек-лист готовности:</h4>
+                <div className="grid md:grid-cols-2 gap-2 text-sm text-gray-700">
+                  <label className="flex items-center gap-2"><input type="checkbox" className="accent-gray-900" /> Начал учить китайский</label>
+                  <label className="flex items-center gap-2"><input type="checkbox" className="accent-gray-900" /> Собрал аттестат/диплом</label>
+                  <label className="flex items-center gap-2"><input type="checkbox" className="accent-gray-900" /> Заказал переводы</label>
+                  <label className="flex items-center gap-2"><input type="checkbox" className="accent-gray-900" /> Поставил апостиль</label>
+                  <label className="flex items-center gap-2"><input type="checkbox" className="accent-gray-900" /> Получил рекомендации</label>
+                  <label className="flex items-center gap-2"><input type="checkbox" className="accent-gray-900" /> Написал мотивационное письмо</label>
+                  <label className="flex items-center gap-2"><input type="checkbox" className="accent-gray-900" /> Прошёл медосмотр</label>
+                  <label className="flex items-center gap-2"><input type="checkbox" className="accent-gray-900" /> Получил справку о несудимости</label>
                 </div>
               </div>
             </div>
@@ -784,16 +753,16 @@ export default function App() {
         {/* ===== ВКЛАДКА ЧАТ ===== */}
         {activeTab === 'chat' && (
           <div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">🤖 ИИ-консультант по поступлению</h2>
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">ИИ-консультант по поступлению</h2>
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
               {/* Сообщения чата */}
               <div className="h-[500px] overflow-y-auto p-4 space-y-4">
                 {chatMessages.map((msg, i) => (
                   <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                     <div className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                       msg.role === 'user'
-                        ? 'bg-red-600 text-white'
-                        : 'bg-gray-100 text-gray-800'
+                        ? 'bg-gray-900 text-white'
+                        : 'bg-gray-100 text-gray-900'
                     }`}>
                       <div className="text-sm whitespace-pre-wrap" dangerouslySetInnerHTML={{
                         __html: msg.content
@@ -811,7 +780,7 @@ export default function App() {
                   <button
                     key={q}
                     onClick={() => { setChatInput(q); }}
-                    className="text-xs bg-gray-100 hover:bg-red-50 hover:text-red-700 text-gray-600 px-3 py-1.5 rounded-full transition-colors"
+                    className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded transition-colors"
                   >
                     {q}
                   </button>
@@ -827,11 +796,11 @@ export default function App() {
                     onChange={e => setChatInput(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && handleChatSend()}
                     placeholder="Задайте вопрос о поступлении в Китай..."
-                    className="flex-1 px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-red-200 focus:border-red-400 outline-none"
+                    className="flex-1 px-4 py-3 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-gray-200 focus:border-gray-400 outline-none"
                   />
                   <button
                     onClick={handleChatSend}
-                    className="bg-red-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-red-700 transition-colors"
+                    className="bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors"
                   >
                     Отправить
                   </button>
@@ -843,11 +812,9 @@ export default function App() {
       </main>
 
       {/* Подвал */}
-      <footer className="mt-12 border-t border-gray-200 bg-white/50">
+      <footer className="mt-12 border-t border-gray-200 bg-white">
         <div className="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-gray-500">
-          <p>🇨🇳 ИИ-Поиск вузов Китая — Информация актуальна на сентябрь 2026</p>
-          <p className="mt-1">⚠️ Всегда проверяйте актуальность данных на официальных сайтах вузов</p>
-          <p className="mt-1">Курс: 1 ¥ ≈ {CNY_TO_RUB} ₽</p>
+          <p>Информация актуальна на сентябрь 2026 • Курс: 1 ¥ ≈ {CNY_TO_RUB} ₽</p>
         </div>
       </footer>
     </div>
