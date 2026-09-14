@@ -156,7 +156,21 @@ export default function App() {
     }, 1000);
   };
 
-  const cities = ['Любой', 'Пекин', 'Шанхай', 'Ханчжоу', 'Нанкин', 'Сучжоу', 'Уси', 'Чанчжоу', 'Янчжоу', 'Наньтун', 'Хуайань', 'Яньчэн', 'Чаншу', 'Сюйчжоу', 'Тайчжоу', 'Ляньюньган', 'Ухань', 'Харбин', 'Сямынь', 'Гуанчжоу', 'Шэньчжэнь', 'Чэнду', 'Чунцин', 'Лешань', 'Ибинь', 'Цзигун', 'Мяньян', 'Лучжоу', 'Яань', 'Наньчун', 'Нэйцзян', 'Суйнин', 'Паньчжихуа', 'Дачжоу', 'Сиань', 'Тяньцзинь', 'Цзинань', 'Циндао', 'Шэньян', 'Далянь', 'Чанша', 'Сянтань', 'Кайфын', 'Хэфэй', 'Куньмин', 'Наньнин', 'Гуйлинь', 'Чанчунь', 'Яньцзи', 'Ланьчжоу', 'Гуйян', 'Хайкоу', 'Фучжоу', 'Чжэньцзян', 'Фушунь', 'Аньшань', 'Хулудао', 'Цзиньчжоу', 'Даньдун', 'Баодин', 'Шицзячжуан', 'Тайюань', 'Хух-Хото', 'Синин', 'Иньчуань', 'Урумчи'];
+  // Функция для получения городов по провинции
+  const getCitiesByProvince = (province: string): string[] => {
+    if (province === 'Любая') {
+      return ['Любой', 'Пекин', 'Шанхай', 'Ханчжоу', 'Нанкин', 'Сучжоу', 'Уси', 'Чанчжоу', 'Янчжоу', 'Наньтун', 'Хуайань', 'Яньчэн', 'Чаншу', 'Сюйчжоу', 'Тайчжоу', 'Ляньюньган', 'Ухань', 'Харбин', 'Сямынь', 'Гуанчжоу', 'Шэньчжэнь', 'Чэнду', 'Чунцин', 'Лешань', 'Ибинь', 'Цзигун', 'Мяньян', 'Лучжоу', 'Яань', 'Наньчун', 'Нэйцзян', 'Суйнин', 'Паньчжихуа', 'Дачжоу', 'Сиань', 'Тяньцзинь', 'Цзинань', 'Циндао', 'Шэньян', 'Далянь', 'Чанша', 'Сянтань', 'Кайфын', 'Хэфэй', 'Куньмин', 'Наньнин', 'Гуйлинь', 'Чанчунь', 'Яньцзи', 'Ланьчжоу', 'Гуйян', 'Хайкоу', 'Фучжоу', 'Чжэньцзян', 'Фушунь', 'Аньшань', 'Хулудао', 'Цзиньчжоу', 'Даньдун', 'Баодин', 'Шицзячжуан', 'Тайюань', 'Хух-Хото', 'Синин', 'Иньчуань', 'Урумчи'];
+    }
+    
+    const citiesInProvince = universities
+      .filter(uni => uni.province === province)
+      .map(uni => uni.cityRu)
+      .filter((city, index, self) => self.indexOf(city) === index); // Убираем дубликаты
+    
+    return ['Любой', ...citiesInProvince.sort()];
+  };
+
+  const availableCities = getCitiesByProvince(province);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -277,7 +291,19 @@ export default function App() {
                   <div>
                     <label className="text-sm text-gray-600">Провинция</label>
                     <select
-                      value={province} onChange={e => setProvince(e.target.value)}
+                      value={province} onChange={e => {
+                        const newProvince = e.target.value;
+                        setProvince(newProvince);
+                        // Сбрасываем город, если он не входит в выбранную провинцию
+                        if (newProvince !== 'Любая') {
+                          const citiesInNewProvince = universities
+                            .filter(uni => uni.province === newProvince)
+                            .map(uni => uni.cityRu);
+                          if (city !== 'Любой' && !citiesInNewProvince.includes(city)) {
+                            setCity('Любой');
+                          }
+                        }
+                      }}
                       className="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-red-200 outline-none"
                     >
                       <option>Любая</option>
@@ -311,7 +337,7 @@ export default function App() {
                       value={city} onChange={e => setCity(e.target.value)}
                       className="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-red-200 outline-none"
                     >
-                      {cities.map(c => <option key={c}>{c}</option>)}
+                      {availableCities.map((c: string) => <option key={c}>{c}</option>)}
                     </select>
                   </div>
                   <div>
