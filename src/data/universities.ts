@@ -1518,6 +1518,44 @@ export const universities: University[] = [
     compatriots: "Мало",
     internet: "ВПН обязателен",
     partTime: "Разрешена"
+  },
+
+  // ===== ЛЯОНИН (ДОПОЛНИТЕЛЬНО) =====
+  {
+    id: 41,
+    name: "Ляонинский университет (Ляода)",
+    nameZh: "辽宁大学",
+    city: "Shenyang",
+    cityRu: "Шэньян",
+    province: "Ляонин",
+    type: "Проект 211",
+    qsRanking: 780,
+    program: "1+4 Бакалавриат",
+    specialties: ["Экономика", "Финансы", "Право", "Информатика", "Международные отношения", "Языкознание"],
+    language: "Англ., Кит.",
+    preparatoryYear: "Да",
+    hskAfterYear: "ХСКЬ 4",
+    costLanguageCNY: 16000,
+    costBachelorCNY: 20000,
+    dormitoryCNY: 3500,
+    grantCSC: "Да",
+    grantCIS: "Да",
+    deadlineCSC: "20 апреля 2027",
+    deadlineCIS: "30 мая 2027",
+    documents: "Диплом, транскрипт, 2 рекомендации, мотивационное письмо, медсправка, паспорт",
+    link: "http://www.lnu.edu.cn",
+    competition: 6,
+    acceptanceRate: 18,
+    avgGPA: 3.2,
+    hskPassRate: 93,
+    grantRenewalRate: 86,
+    difficultyCategory: "MEDIUM",
+    cityLifeCost: 2800,
+    cityDescription: "Столица провинции Ляонин. Промышленный центр, близко к Корее и Японии. Много русскоговорящих.",
+    climate: "Холодная зима, тёплое лето",
+    compatriots: "Много",
+    internet: "ВПН обязателен",
+    partTime: "Разрешена"
   }
 ];
 
