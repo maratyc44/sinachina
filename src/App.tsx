@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { universities, grants, documents, timeline, CNY_TO_RUB, University } from './data/universities';
 
-// ===== UTILITY FUNCTIONS =====
+// ===== УТИЛИТЫ =====
 function toRub(cny: number): string {
   return Math.round(cny * CNY_TO_RUB).toLocaleString('ru-RU');
 }
@@ -42,36 +42,34 @@ function getChanceColor(chance: number): string {
   return 'text-red-600';
 }
 
-// ===== MAIN APP =====
+// ===== ГЛАВНОЕ ПРИЛОЖЕНИЕ =====
 export default function App() {
   const [activeTab, setActiveTab] = useState<'search' | 'grants' | 'documents' | 'timeline' | 'chat'>('search');
   const [selectedUni, setSelectedUni] = useState<University | null>(null);
 
-  // Filters
+  // Фильтры
   const [specialty, setSpecialty] = useState('');
   const [city, setCity] = useState('Любой');
   const [budget, setBudget] = useState('Любой');
   const [difficulty, setDifficulty] = useState('Любая');
 
-  // Profile
+  // Профиль
   const [gpa, setGpa] = useState(3.5);
   const [age, setAge] = useState(18);
   const [hasHsk, setHasHsk] = useState(false);
 
-  // Chat
+  // Чат
   const [chatMessages, setChatMessages] = useState<{role: string; content: string}[]>([
-    { role: 'assistant', content: 'Здравствуйте! Я — ИИ-агент по поступлению в Китай. Задайте мне вопрос о вузах, грантах, стоимости или шансах поступления. Например: "Какие вузы в Китае с программой 1+4 по CS?"' }
+    { role: 'assistant', content: 'Здравствуйте! Я — ИИ-консультант по поступлению в Китай. Задайте мне вопрос о вузах, грантах, стоимости или шансах поступления. Например: «Какие вузы в Китае с программой 1+4 по информатике?»' }
   ]);
   const [chatInput, setChatInput] = useState('');
 
   const filteredUnis = useMemo(() => {
     return universities.filter(uni => {
       if (specialty && !uni.specialties.some(s => s.toLowerCase().includes(specialty.toLowerCase()))) return false;
-      if (city !== 'Любой' && uni.city !== city) return false;
+      if (city !== 'Любой' && uni.cityRu !== city) return false;
       if (difficulty !== 'Любая' && uni.difficultyCategory !== difficulty) return false;
-      if (budget === 'Только грант') {
-        // Show all with grants
-      } else if (budget === 'До 300 000 ₽') {
+      if (budget === 'До 300 000 ₽') {
         if (uni.costBachelorCNY * CNY_TO_RUB > 300000) return false;
       } else if (budget === 'До 500 000 ₽') {
         if (uni.costBachelorCNY * CNY_TO_RUB > 500000) return false;
@@ -86,34 +84,35 @@ export default function App() {
     setChatMessages(prev => [...prev, { role: 'user', content: userMsg }]);
     setChatInput('');
 
-    // Simulate AI response
     setTimeout(() => {
       let response = '';
       const lowerMsg = userMsg.toLowerCase();
 
       if (lowerMsg.includes('грант') || lowerMsg.includes('csc') || lowerMsg.includes('стипенд')) {
-        response = `🎓 **Гранты для поступления в Китай:**\n\n1. **CSC Type A** — правительственная стипендия. Покрывает ВСЁ: обучение, общежитие, медстраховку + 2500 CNY/мес на жизнь. Подача через посольство Китая. Дедлайн: март-апрель.\n\n2. **CIS (Институт Конфуция)** — покрывает 1 год языка + стипендию. Продление на бакалавриат по конкурсу. Дедлайн: май.\n\n3. **Провинциальные гранты** — от провинций (Beijing, Jiangsu и др.). Реально получить, конкуренция ниже.\n\n💡 **Совет:** Подавайтесь на ВСЕ типы грантов одновременно — это увеличивает шансы в 3 раза.`;
+        response = `🎓 **Гранты для поступления в Китай:**\n\n**1. CSC Тип А** — правительственная стипендия. Покрывает ВСЁ: обучение, общежитие, медстраховку + 2 500 юаней/мес на жизнь. Подача через посольство Китая. Дедлайн: март–апрель.\n\n**2. CIS (Институт Конфуция)** — покрывает 1 год языка + стипендию. Продление на бакалавриат по конкурсу. Дедлайн: май.\n\n**3. Провинциальные гранты** — от провинций (Пекин, Цзянсу и др.). Реально получить, конкуренция ниже.\n\n💡 **Совет:** Подавайтесь на ВСЕ типы грантов одновременно — это увеличивает шансы в 3 раза.`;
       } else if (lowerMsg.includes('стоимость') || lowerMsg.includes('цена') || lowerMsg.includes('рубл') || lowerMsg.includes('юан')) {
-        response = `💰 **Стоимость обучения в Китае (программа 1+4):**\n\n| Вуз | Язык (год) | Бакалавр (год) | Общежитие | ИТОГО 5 лет |\n|-----|-----------|----------------|-----------|-------------|\n| Tsinghua | 30 000 ¥ | 40 000 ¥ | 8 000 ¥ | ~3.5 млн ₽ |\n| Zhejiang | 22 000 ¥ | 32 000 ¥ | 6 000 ¥ | ~2.7 млн ₽ |\n| Wuhan | 18 000 ¥ | 26 000 ¥ | 4 000 ¥ | ~2.1 млн ₽ |\n| Jiangsu | 16 000 ¥ | 18 000 ¥ | 3 000 ¥ | ~1.5 млн ₽ |\n\n**Курс:** 1 CNY ≈ ${CNY_TO_RUB} RUB\n\n💡 С грантом CSC: только карманные расходы ~1500 CNY/мес (~18 750 ₽)`;
+        response = `💰 **Стоимость обучения в Китае (программа 1+4):**\n\n**Университет Цинхуа (Пекин):**\n• Языковой год: 30 000 ¥ (≈${toRub(30000)} ₽)\n• Бакалавриат: 40 000 ¥/год (≈${toRub(40000)} ₽)\n• Общежитие: 8 000 ¥/год\n• Итого за 5 лет: ≈3,5 млн ₽\n\n**Чжэцзянский университет (Ханчжоу):**\n• Языковой год: 22 000 ¥\n• Бакалавриат: 32 000 ¥/год\n• Итого за 5 лет: ≈2,7 млн ₽\n\n**Уханьский университет:**\n• Бакалавриат: 26 000 ¥/год\n• Итого за 5 лет: ≈2,1 млн ₽\n\n**Университет Цзянсу (Чжэньцзян):**\n• Бакалавриат: 18 000 ¥/год\n• Итого за 5 лет: ≈1,5 млн ₽\n\n💡 С грантом CSC: только карманные расходы ≈1 500 ¥/мес (≈${toRub(1500)} ₽)`;
       } else if (lowerMsg.includes('шанс') || lowerMsg.includes('поступ') || lowerMsg.includes('сложно')) {
-        response = `📊 **Шансы поступления (для GPA ${gpa}, возраст ${age}):**\n\n| Вуз | Категория | Базовый шанс | Ваш шанс | Конкурс |\n|-----|-----------|-------------|----------|--------|\n| Tsinghua | Крайне сложно | 4% | ${calculateChance(universities[0], gpa, age, hasHsk)}% | 25:1 |\n| Zhejiang | Сложно | 6% | ${calculateChance(universities[1], gpa, age, hasHsk)}% | 18:1 |\n| Wuhan | Средне | 12% | ${calculateChance(universities[2], gpa, age, hasHsk)}% | 8:1 |\n| Jiangsu | Доступно | 35% | ${calculateChance(universities[5], gpa, age, hasHsk)}% | 3:1 |\n\n💡 **Как улучшить шанс:**\n- Сдать HSK 2-3 до подачи: +15%\n- Подтянуть GPA: +10%\n- Податься в 3-4 вуза одновременно\n- Подать на все типы грантов`;
+        response = `📊 **Шансы поступления (для GPA ${gpa}, возраст ${age}):**\n\n• **Университет Цинхуа** — Крайне сложно: ${calculateChance(universities[0], gpa, age, hasHsk)}% (конкурс 25:1)\n• **Чжэцзянский университет** — Сложно: ${calculateChance(universities[1], gpa, age, hasHsk)}% (конкурс 18:1)\n• **Уханьский университет** — Средне: ${calculateChance(universities[2], gpa, age, hasHsk)}% (конкурс 8:1)\n• **Университет Цзянсу** — Доступно: ${calculateChance(universities[5], gpa, age, hasHsk)}% (конкурс 3:1)\n\n💡 **Как улучшить шанс:**\n• Сдать ХСКЬ 2–3 до подачи: +15%\n• Подтянуть GPA: +10%\n• Податься в 3–4 вуза одновременно\n• Подать на все типы грантов`;
       } else if (lowerMsg.includes('документ') || lowerMsg.includes('какие нужны')) {
-        response = `📋 **Стандартный пакет документов для Китая:**\n\n✅ Аттестат/диплом с апостилем + нотариальный перевод\n✅ Транскрипт оценок\n✅ 2 рекомендательных письма\n✅ Мотивационное письмо (SOP)\n✅ Медсправка (Foreigner Physical Examination Form)\n✅ Справка о несудимости\n✅ Загранпаспорт (срок > 1.5 лет)\n✅ Фото 4×6 см\n⬜ HSK (если есть)\n⬜ Финансовые гарантии (если без гранта)\n\n⚠️ Переводы должны быть нотариальными! Закладывайте 2-3 недели на подготовку.`;
+        response = `📋 **Стандартный пакет документов для Китая:**\n\n✅ Аттестат/диплом с апостилем + нотариальный перевод\n✅ Транскрипт оценок\n✅ 2 рекомендательных письма\n✅ Мотивационное письмо (SOP)\n✅ Медсправка (Foreigner Physical Examination Form)\n✅ Справка о несудимости\n✅ Загранпаспорт (срок > 1,5 лет)\n✅ Фото 4×6 см\n⬜ ХСКЬ (если есть)\n⬜ Финансовые гарантии (если без гранта)\n\n⚠️ Переводы должны быть нотариальными! Закладывайте 2–3 недели на подготовку.`;
       } else if (lowerMsg.includes('виз') || lowerMsg.includes('x1')) {
-        response = `✈️ **Виза для учёбы в Китае:**\n\n**Тип X1** — для обучения > 180 дней.\n\n**Процесс:**\n1. Получить JW202 от вуза (после зачисления)\n2. Собрать документы: паспорт, фото, JW202, медсправка\n3. Подать в визовый центр Китая\n4. Срок рассмотрения: 4-7 рабочих дней\n5. После приезда — получить ВНЖ (Residence Permit) в течение 30 дней\n\n⚠️ Медицинское обследование обязательно в Китае в первый месяц!`;
+        response = `✈️ **Виза для учёбы в Китае:**\n\n**Тип X1** — для обучения более 180 дней.\n\n**Процесс:**\n1. Получить JW202 от вуза (после зачисления)\n2. Собрать документы: паспорт, фото, JW202, медсправка\n3. Подать в визовый центр Китая\n4. Срок рассмотрения: 4–7 рабочих дней\n5. После приезда — получить ВНЖ (Residence Permit) в течение 30 дней\n\n⚠️ Медицинское обследование обязательно в Китае в первый месяц!`;
       } else if (lowerMsg.includes('1+4') || lowerMsg.includes('подготовитель')) {
-        response = `🎓 **Программа 1+4 — как это работает:**\n\n**Год 1:** Интенсивный китайский (25-30 часов/неделю)\n- Цель: сдать HSK 4\n- BLCU: 98% сдают (лучший результат)\n- В среднем: 85-95% сдают\n\n**Годы 2-5:** Бакалавриат по специальности\n- Переход НЕ автоматический (нужен GPA > 3.0)\n- Грант CIS на 1 год НЕ гарантирует продление\n\n⚠️ **Риски:**\n- Не сдал HSK 4 → отчисление или домой\n- 15-20% не сдают с первого раза\n- Смена специальности после языка — не во всех вузах\n\n💡 **Совет:** Начните учить китайский СЕЙЧАС — это увеличит шансы на грант на 15%`;
+        response = `🎓 **Программа 1+4 — как это работает:**\n\n**Год 1:** Интенсивный китайский (25–30 часов/неделю)\n• Цель: сдать ХСКЬ 4\n• BLCU: 98% сдают (лучший результат)\n• В среднем: 85–95% сдают\n\n**Годы 2–5:** Бакалавриат по специальности\n• Переход НЕ автоматический (нужен GPA > 3.0)\n• Грант CIS на 1 год НЕ гарантирует продление\n\n⚠️ **Риски:**\n• Не сдал ХСКЬ 4 → отчисление или домой\n• 15–20% не сдают с первого раза\n• Смена специальности после языка — не во всех вузах\n\n💡 **Совет:** Начните учить китайский СЕЙЧАС — это увеличит шансы на грант на 15%`;
       } else {
-        response = `Спасибо за вопрос! Вот что я могу рассказать:\n\n🔍 **Я могу помочь с:**\n- Поиском вузов по специальности и бюджету\n- Расчётом стоимости в рублях и юанях\n- Оценкой шансов поступления\n- Информацией о грантах (CSC, CIS, Provincial)\n- Списком документов и дедлайнами\n- Визовыми вопросами\n- Программами 1+4 (подготовительный год + бакалавриат)\n\nПопробуйте спросить: "Какие гранты есть?", "Сколько стоит обучение?", "Какие шансы поступить?"`;
+        response = `Спасибо за вопрос! Вот что я могу рассказать:\n\n🔍 **Я могу помочь с:**\n• Поиском вузов по специальности и бюджету\n• Расчётом стоимости в рублях и юанях\n• Оценкой шансов поступления\n• Информацией о грантах (CSC, CIS, провинциальные)\n• Списком документов и дедлайнами\n• Визовыми вопросами\n• Программами 1+4 (подготовительный год + бакалавриат)\n\nПопробуйте спросить: «Какие гранты есть?», «Сколько стоит обучение?», «Какие шансы поступить?»`;
       }
 
       setChatMessages(prev => [...prev, { role: 'assistant', content: response }]);
     }, 1000);
   };
 
+  const cities = ['Любой', 'Пекин', 'Ханчжоу', 'Ухань', 'Харбин', 'Сямынь', 'Гуанчжоу', 'Чжэньцзян'];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-amber-50">
-      {/* Header */}
+      {/* Шапка */}
       <header className="bg-white/80 backdrop-blur-md border-b border-red-100 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -121,17 +120,17 @@ export default function App() {
               🎓
             </div>
             <div>
-              <h1 className="text-lg font-bold text-gray-900">AI UniFinder China</h1>
-              <p className="text-xs text-gray-500">Поиск вузов и грантов • Программа 1+4</p>
+              <h1 className="text-lg font-bold text-gray-900">ИИ-Поиск вузов Китая</h1>
+              <p className="text-xs text-gray-500">Поиск университетов и грантов • Программа 1+4</p>
             </div>
           </div>
           <nav className="hidden md:flex gap-1">
             {[
-              { id: 'search', label: '🔍 Поиск', },
+              { id: 'search', label: '🔍 Поиск' },
               { id: 'grants', label: '🎓 Гранты' },
               { id: 'documents', label: '📋 Документы' },
               { id: 'timeline', label: '🗓️ План' },
-              { id: 'chat', label: '🤖 AI-чат' },
+              { id: 'chat', label: '🤖 ИИ-чат' },
             ].map(tab => (
               <button
                 key={tab.id}
@@ -147,14 +146,14 @@ export default function App() {
             ))}
           </nav>
         </div>
-        {/* Mobile nav */}
+        {/* Мобильная навигация */}
         <div className="md:hidden flex gap-1 px-4 pb-2 overflow-x-auto">
           {[
             { id: 'search', label: '🔍 Поиск' },
             { id: 'grants', label: '🎓 Гранты' },
             { id: 'documents', label: '📋' },
             { id: 'timeline', label: '🗓️' },
-            { id: 'chat', label: '🤖 AI' },
+            { id: 'chat', label: '🤖 ИИ' },
           ].map(tab => (
             <button
               key={tab.id}
@@ -172,30 +171,30 @@ export default function App() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 py-6">
-        {/* ===== SEARCH TAB ===== */}
+        {/* ===== ВКЛАДКА ПОИСК ===== */}
         {activeTab === 'search' && !selectedUni && (
           <div>
-            {/* Hero */}
+            {/* Герой */}
             <div className="bg-gradient-to-r from-red-600 to-red-800 rounded-2xl p-6 md:p-10 text-white mb-8 shadow-xl">
               <h2 className="text-2xl md:text-4xl font-bold mb-3">🇨🇳 Поступление в Китай</h2>
               <p className="text-red-100 text-lg mb-4">Программы 1+4 для иностранцев без знания китайского</p>
               <div className="flex flex-wrap gap-4 text-sm">
-                <div className="bg-white/20 rounded-lg px-4 py-2">📚 1 год китайского → HSK 4</div>
+                <div className="bg-white/20 rounded-lg px-4 py-2">📚 1 год китайского → ХСКЬ 4</div>
                 <div className="bg-white/20 rounded-lg px-4 py-2">🎓 4 года бакалавриата</div>
                 <div className="bg-white/20 rounded-lg px-4 py-2">💰 Гранты до 100%</div>
               </div>
             </div>
 
-            {/* Profile & Filters */}
+            {/* Профиль и фильтры */}
             <div className="grid md:grid-cols-3 gap-6 mb-8">
-              {/* Profile */}
+              {/* Профиль */}
               <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
                 <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
                   👤 Ваш профиль
                 </h3>
                 <div className="space-y-4">
                   <div>
-                    <label className="text-sm text-gray-600">GPA (из 5.0): <span className="font-bold text-red-600">{gpa}</span></label>
+                    <label className="text-sm text-gray-600">Средний балл (из 5.0): <span className="font-bold text-red-600">{gpa}</span></label>
                     <input
                       type="range" min="2" max="5" step="0.1" value={gpa}
                       onChange={e => setGpa(parseFloat(e.target.value))}
@@ -216,7 +215,7 @@ export default function App() {
                       onChange={e => setHasHsk(e.target.checked)}
                       className="accent-red-600"
                     />
-                    <label htmlFor="hsk" className="text-sm text-gray-600">Есть сертификат HSK</label>
+                    <label htmlFor="hsk" className="text-sm text-gray-600">Есть сертификат ХСКЬ</label>
                   </div>
                   {age > 25 && (
                     <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-2 text-xs text-yellow-800">
@@ -226,7 +225,7 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Filters */}
+              {/* Фильтры */}
               <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
                 <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
                   🔍 Фильтры
@@ -235,7 +234,7 @@ export default function App() {
                   <div>
                     <label className="text-sm text-gray-600">Специальность</label>
                     <input
-                      type="text" placeholder="CS, Medicine, Business..."
+                      type="text" placeholder="Информатика, Медицина, Бизнес..."
                       value={specialty} onChange={e => setSpecialty(e.target.value)}
                       className="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-red-200 focus:border-red-400 outline-none"
                     />
@@ -246,14 +245,7 @@ export default function App() {
                       value={city} onChange={e => setCity(e.target.value)}
                       className="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-red-200 outline-none"
                     >
-                      <option>Любой</option>
-                      <option>Beijing</option>
-                      <option>Hangzhou</option>
-                      <option>Wuhan</option>
-                      <option>Harbin</option>
-                      <option>Xiamen</option>
-                      <option>Guangzhou</option>
-                      <option>Zhenjiang</option>
+                      {cities.map(c => <option key={c}>{c}</option>)}
                     </select>
                   </div>
                   <div>
@@ -284,7 +276,7 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Quick Stats */}
+              {/* Быстрая статистика */}
               <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
                 <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
                   📊 Быстрая статистика
@@ -299,7 +291,7 @@ export default function App() {
                     <div className="text-xs text-gray-600">Типа грантов</div>
                   </div>
                   <div className="bg-green-50 rounded-lg p-3 text-center">
-                    <div className="text-2xl font-bold text-green-700">12.5</div>
+                    <div className="text-2xl font-bold text-green-700">12,5</div>
                     <div className="text-xs text-gray-600">Курс ¥/₽</div>
                   </div>
                   <div className="bg-purple-50 rounded-lg p-3 text-center">
@@ -309,13 +301,13 @@ export default function App() {
                 </div>
                 <div className="mt-4 p-3 bg-amber-50 rounded-lg border border-amber-200">
                   <p className="text-xs text-amber-800">
-                    💡 <strong>Совет:</strong> Подавайтесь на CSC + CIS + Provincial одновременно — это увеличивает шанс гранта в 3 раза.
+                    💡 <strong>Совет:</strong> Подавайтесь на CSC + CIS + Провинциальный одновременно — это увеличивает шанс гранта в 3 раза.
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* University Cards */}
+            {/* Карточки университетов */}
             <h3 className="text-xl font-bold text-gray-800 mb-4">
               🏛️ Найденные университеты ({filteredUnis.length})
             </h3>
@@ -331,7 +323,7 @@ export default function App() {
                     <div className="flex justify-between items-start mb-3">
                       <div>
                         <h4 className="font-bold text-gray-900 group-hover:text-red-700 transition-colors">{uni.name}</h4>
-                        <p className="text-sm text-gray-500">{uni.nameZh} • {uni.city}</p>
+                        <p className="text-sm text-gray-500">{uni.nameZh} • {uni.cityRu}</p>
                       </div>
                       <span className={`text-xs px-2 py-1 rounded-full border ${getDifficultyColor(uni.difficultyCategory)}`}>
                         {getDifficultyLabel(uni.difficultyCategory)}
@@ -376,7 +368,7 @@ export default function App() {
           </div>
         )}
 
-        {/* ===== UNIVERSITY DETAIL ===== */}
+        {/* ===== ДЕТАЛЬНАЯ СТРАНИЦА УНИВЕРСИТЕТА ===== */}
         {activeTab === 'search' && selectedUni && (
           <div>
             <button
@@ -387,17 +379,17 @@ export default function App() {
             </button>
 
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-              {/* Header */}
+              {/* Заголовок */}
               <div className="bg-gradient-to-r from-red-600 to-red-800 p-6 text-white">
                 <div className="flex justify-between items-start">
                   <div>
                     <h2 className="text-2xl font-bold">{selectedUni.name}</h2>
-                    <p className="text-red-200">{selectedUni.nameZh} • {selectedUni.city}</p>
+                    <p className="text-red-200">{selectedUni.nameZh} • {selectedUni.cityRu}</p>
                     <p className="text-red-100 text-sm mt-1">{selectedUni.type}</p>
                   </div>
                   <div className="text-right">
-                    <div className="text-3xl font-bold">QS #{typeof selectedUni.qsRanking === 'number' ? selectedUni.qsRanking : '—'}</div>
-                    <span className={`text-xs px-2 py-1 rounded-full bg-white/20`}>
+                    <div className="text-3xl font-bold">QS №{typeof selectedUni.qsRanking === 'number' ? selectedUni.qsRanking : '—'}</div>
+                    <span className="text-xs px-2 py-1 rounded-full bg-white/20">
                       {getDifficultyLabel(selectedUni.difficultyCategory)}
                     </span>
                   </div>
@@ -405,7 +397,7 @@ export default function App() {
               </div>
 
               <div className="p-6 space-y-6">
-                {/* Stats Grid */}
+                {/* Статистика */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   <div className="bg-red-50 rounded-xl p-4 text-center">
                     <div className="text-2xl font-bold text-red-700">{selectedUni.competition}:1</div>
@@ -417,7 +409,7 @@ export default function App() {
                   </div>
                   <div className="bg-green-50 rounded-xl p-4 text-center">
                     <div className="text-2xl font-bold text-green-700">{selectedUni.hskPassRate}%</div>
-                    <div className="text-xs text-gray-600">Сдают HSK 4</div>
+                    <div className="text-xs text-gray-600">Сдают ХСКЬ 4</div>
                   </div>
                   <div className="bg-purple-50 rounded-xl p-4 text-center">
                     <div className="text-2xl font-bold text-purple-700">{calculateChance(selectedUni, gpa, age, hasHsk)}%</div>
@@ -425,7 +417,7 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Financial */}
+                {/* Финансы */}
                 <div>
                   <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">💰 Финансы (взгляд родителя)</h3>
                   <div className="bg-gray-50 rounded-xl p-4">
@@ -433,42 +425,42 @@ export default function App() {
                       <tbody>
                         <tr className="border-b border-gray-200">
                           <td className="py-2 text-gray-600">Подготовительный год</td>
-                          <td className="py-2 text-right font-medium">{selectedUni.costLanguageCNY.toLocaleString()} CNY</td>
+                          <td className="py-2 text-right font-medium">{selectedUni.costLanguageCNY.toLocaleString()} ¥</td>
                           <td className="py-2 text-right text-red-600">≈ {toRub(selectedUni.costLanguageCNY)} ₽</td>
                         </tr>
                         <tr className="border-b border-gray-200">
                           <td className="py-2 text-gray-600">Бакалавриат (в год)</td>
-                          <td className="py-2 text-right font-medium">{selectedUni.costBachelorCNY.toLocaleString()} CNY</td>
+                          <td className="py-2 text-right font-medium">{selectedUni.costBachelorCNY.toLocaleString()} ¥</td>
                           <td className="py-2 text-right text-red-600">≈ {toRub(selectedUni.costBachelorCNY)} ₽</td>
                         </tr>
                         <tr className="border-b border-gray-200">
                           <td className="py-2 text-gray-600">Общежитие (в год)</td>
-                          <td className="py-2 text-right font-medium">{selectedUni.dormitoryCNY.toLocaleString()} CNY</td>
+                          <td className="py-2 text-right font-medium">{selectedUni.dormitoryCNY.toLocaleString()} ¥</td>
                           <td className="py-2 text-right text-red-600">≈ {toRub(selectedUni.dormitoryCNY)} ₽</td>
                         </tr>
                         <tr className="border-b border-gray-200">
                           <td className="py-2 text-gray-600">Жизнь в городе (в месяц)</td>
-                          <td className="py-2 text-right font-medium">{selectedUni.cityLifeCost.toLocaleString()} CNY</td>
+                          <td className="py-2 text-right font-medium">{selectedUni.cityLifeCost.toLocaleString()} ¥</td>
                           <td className="py-2 text-right text-red-600">≈ {toRub(selectedUni.cityLifeCost)} ₽</td>
                         </tr>
                         <tr className="bg-red-50">
                           <td className="py-2 font-bold text-gray-800">ИТОГО за 5 лет (без гранта)</td>
                           <td className="py-2 text-right font-bold">
-                            {((selectedUni.costLanguageCNY + selectedUni.costBachelorCNY * 4 + selectedUni.dormitoryCNY * 5 + selectedUni.cityLifeCost * 48)).toLocaleString()} CNY
+                            {(selectedUni.costLanguageCNY + selectedUni.costBachelorCNY * 4 + selectedUni.dormitoryCNY * 5 + selectedUni.cityLifeCost * 48).toLocaleString()} ¥
                           </td>
                           <td className="py-2 text-right font-bold text-red-700">
-                            ≈ {(toRub(selectedUni.costLanguageCNY + selectedUni.costBachelorCNY * 4 + selectedUni.dormitoryCNY * 5 + selectedUni.cityLifeCost * 48))} ₽
+                            ≈ {toRub(selectedUni.costLanguageCNY + selectedUni.costBachelorCNY * 4 + selectedUni.dormitoryCNY * 5 + selectedUni.cityLifeCost * 48)} ₽
                           </td>
                         </tr>
                       </tbody>
                     </table>
                     <div className="mt-3 p-2 bg-green-50 rounded-lg text-sm text-green-800">
-                      ✅ <strong>С грантом CSC:</strong> только карманные расходы ~1500 CNY/мес (≈ {toRub(1500)} ₽)
+                      ✅ <strong>С грантом CSC:</strong> только карманные расходы ≈1 500 ¥/мес (≈ {toRub(1500)} ₽)
                     </div>
                   </div>
                 </div>
 
-                {/* Student Life */}
+                {/* Жизнь студента */}
                 <div>
                   <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">🎒 Жизнь студента (взгляд абитуриента)</h3>
                   <div className="grid md:grid-cols-2 gap-3">
@@ -495,12 +487,12 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Grants */}
+                {/* Гранты */}
                 <div>
                   <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">🎯 Гранты и дедлайны</h3>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between bg-yellow-50 rounded-lg p-3">
-                      <span className="text-sm font-medium">CSC Type A: {selectedUni.grantCSC}</span>
+                      <span className="text-sm font-medium">CSC Тип А: {selectedUni.grantCSC}</span>
                       <span className="text-sm text-red-600 font-medium">📅 {selectedUni.deadlineCSC}</span>
                     </div>
                     <div className="flex items-center justify-between bg-blue-50 rounded-lg p-3">
@@ -514,13 +506,13 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Chance Analysis */}
+                {/* Анализ шансов */}
                 <div>
                   <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">📊 Анализ шансов</h3>
                   <div className="bg-gray-50 rounded-xl p-4">
                     <div className="grid grid-cols-2 gap-4 mb-4">
                       <div>
-                        <p className="text-sm text-gray-600">Ваш GPA:</p>
+                        <p className="text-sm text-gray-600">Ваш средний балл:</p>
                         <p className="font-bold text-lg">{gpa} / 5.0</p>
                         <p className="text-xs text-gray-500">Средний у принятых: {selectedUni.avgGPA}</p>
                       </div>
@@ -553,25 +545,29 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Documents */}
+                {/* Документы */}
                 <div>
                   <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">📋 Документы</h3>
                   <p className="text-sm text-gray-600 mb-2">{selectedUni.documents}</p>
                 </div>
 
-                {/* Risks */}
+                {/* Риски */}
                 <div>
                   <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">⚠️ Риски и предупреждения</h3>
                   <div className="bg-red-50 border border-red-200 rounded-xl p-4 space-y-2 text-sm text-red-800">
-                    <p>• Не сдал HSK 4 после года → отчисление или отправка домой</p>
+                    <p>• Не сдал ХСКЬ 4 после года → отчисление или отправка домой</p>
                     <p>• Грант CIS на 1 год НЕ гарантирует продление на бакалавриат</p>
                     <p>• Конкурс: {selectedUni.competition} человек на место</p>
-                    <p>• {selectedUni.difficultyCategory === 'EXTREMELY_HARD' ? 'Даже с идеальным профилем шанс 2-5%' : ''}</p>
-                    <p>• {selectedUni.difficultyCategory === 'HARD' ? 'Высокая конкуренция, нужно сильное SOP' : ''}</p>
+                    {selectedUni.difficultyCategory === 'EXTREMELY_HARD' && (
+                      <p>• Даже с идеальным профилем шанс 2–5%</p>
+                    )}
+                    {selectedUni.difficultyCategory === 'HARD' && (
+                      <p>• Высокая конкуренция, нужно сильное мотивационное письмо</p>
+                    )}
                   </div>
                 </div>
 
-                {/* Link */}
+                {/* Ссылка */}
                 <a
                   href={selectedUni.link}
                   target="_blank"
@@ -585,7 +581,7 @@ export default function App() {
           </div>
         )}
 
-        {/* ===== GRANTS TAB ===== */}
+        {/* ===== ВКЛАДКА ГРАНТЫ ===== */}
         {activeTab === 'grants' && (
           <div>
             <h2 className="text-2xl font-bold text-gray-800 mb-6">🎓 Гранты для обучения в Китае</h2>
@@ -628,16 +624,16 @@ export default function App() {
               ))}
             </div>
 
-            {/* Comparison Table */}
+            {/* Таблица сравнения */}
             <div className="mt-8 bg-white rounded-xl p-6 shadow-sm border border-gray-100 overflow-x-auto">
               <h3 className="font-bold text-gray-800 mb-4">📊 Сравнение грантов</h3>
               <table className="w-full text-sm min-w-[600px]">
                 <thead>
                   <tr className="border-b-2 border-gray-200">
                     <th className="text-left py-2 px-3">Параметр</th>
-                    <th className="text-center py-2 px-3">CSC Type A</th>
+                    <th className="text-center py-2 px-3">CSC Тип А</th>
                     <th className="text-center py-2 px-3">CIS</th>
-                    <th className="text-center py-2 px-3">Provincial</th>
+                    <th className="text-center py-2 px-3">Провинциальный</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -655,9 +651,9 @@ export default function App() {
                   </tr>
                   <tr className="border-b border-gray-100">
                     <td className="py-2 px-3 text-gray-600">Стипендия</td>
-                    <td className="py-2 px-3 text-center">2500 ¥/мес</td>
-                    <td className="py-2 px-3 text-center">2500 ¥/мес</td>
-                    <td className="py-2 px-3 text-center">1500-2500 ¥/мес</td>
+                    <td className="py-2 px-3 text-center">2 500 ¥/мес</td>
+                    <td className="py-2 px-3 text-center">2 500 ¥/мес</td>
+                    <td className="py-2 px-3 text-center">1 500–2 500 ¥/мес</td>
                   </tr>
                   <tr className="border-b border-gray-100">
                     <td className="py-2 px-3 text-gray-600">Конкурс</td>
@@ -677,7 +673,7 @@ export default function App() {
           </div>
         )}
 
-        {/* ===== DOCUMENTS TAB ===== */}
+        {/* ===== ВКЛАДКА ДОКУМЕНТЫ ===== */}
         {activeTab === 'documents' && (
           <div>
             <h2 className="text-2xl font-bold text-gray-800 mb-6">📋 Документы для поступления</h2>
@@ -685,14 +681,14 @@ export default function App() {
               <div className="space-y-3">
                 {documents.map((doc, i) => (
                   <div key={i} className={`flex items-start gap-3 p-4 rounded-lg border ${doc.required ? 'bg-white border-gray-200' : 'bg-gray-50 border-gray-100'}`}>
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${doc.required ? 'bg-red-100 text-red-700' : 'bg-gray-200 text-gray-600'}`}>
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${doc.required ? 'bg-red-100 text-red-700' : 'bg-gray-200 text-gray-600'}`}>
                       {doc.required ? '✓' : '?'}
                     </div>
                     <div className="flex-1">
                       <p className="font-medium text-gray-800">{doc.name}</p>
                       <p className="text-sm text-gray-500">{doc.note}</p>
                     </div>
-                    <span className={`text-xs px-2 py-1 rounded-full ${doc.required ? 'bg-red-100 text-red-700' : 'bg-gray-200 text-gray-600'}`}>
+                    <span className={`text-xs px-2 py-1 rounded-full shrink-0 ${doc.required ? 'bg-red-100 text-red-700' : 'bg-gray-200 text-gray-600'}`}>
                       {doc.required ? 'Обязательно' : 'По ситуации'}
                     </span>
                   </div>
@@ -705,7 +701,7 @@ export default function App() {
                   <li>• Переводы должны быть <strong>нотариальными</strong></li>
                   <li>• Апостиль ставится на оригинал документа</li>
                   <li>• Медсправка — специальная форма (Foreigner Physical Examination Form)</li>
-                  <li>• Закладывайте <strong>2-3 недели</strong> на подготовку всех документов</li>
+                  <li>• Закладывайте <strong>2–3 недели</strong> на подготовку всех документов</li>
                   <li>• Фото должно быть на <strong>белом фоне</strong>, 4×6 см</li>
                 </ul>
               </div>
@@ -713,7 +709,7 @@ export default function App() {
           </div>
         )}
 
-        {/* ===== TIMELINE TAB ===== */}
+        {/* ===== ВКЛАДКА ПЛАН ===== */}
         {activeTab === 'timeline' && (
           <div>
             <h2 className="text-2xl font-bold text-gray-800 mb-6">🗓️ Пошаговый план поступления</h2>
@@ -743,7 +739,7 @@ export default function App() {
                   <label className="flex items-center gap-2"><input type="checkbox" className="accent-green-600" /> Заказал переводы</label>
                   <label className="flex items-center gap-2"><input type="checkbox" className="accent-green-600" /> Поставил апостиль</label>
                   <label className="flex items-center gap-2"><input type="checkbox" className="accent-green-600" /> Получил рекомендации</label>
-                  <label className="flex items-center gap-2"><input type="checkbox" className="accent-green-600" /> Написал SOP</label>
+                  <label className="flex items-center gap-2"><input type="checkbox" className="accent-green-600" /> Написал мотивационное письмо</label>
                   <label className="flex items-center gap-2"><input type="checkbox" className="accent-green-600" /> Прошёл медосмотр</label>
                   <label className="flex items-center gap-2"><input type="checkbox" className="accent-green-600" /> Получил справку о несудимости</label>
                 </div>
@@ -752,12 +748,12 @@ export default function App() {
           </div>
         )}
 
-        {/* ===== CHAT TAB ===== */}
+        {/* ===== ВКЛАДКА ЧАТ ===== */}
         {activeTab === 'chat' && (
           <div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">🤖 AI-консультант по поступлению</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">🤖 ИИ-консультант по поступлению</h2>
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-              {/* Chat Messages */}
+              {/* Сообщения чата */}
               <div className="h-[500px] overflow-y-auto p-4 space-y-4">
                 {chatMessages.map((msg, i) => (
                   <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
@@ -776,7 +772,7 @@ export default function App() {
                 ))}
               </div>
 
-              {/* Quick Questions */}
+              {/* Быстрые вопросы */}
               <div className="px-4 py-2 border-t border-gray-100 flex flex-wrap gap-2">
                 {['Какие гранты есть?', 'Сколько стоит обучение?', 'Какие шансы поступить?', 'Какие документы нужны?', 'Что такое программа 1+4?', 'Как получить визу?'].map(q => (
                   <button
@@ -789,7 +785,7 @@ export default function App() {
                 ))}
               </div>
 
-              {/* Input */}
+              {/* Ввод */}
               <div className="p-4 border-t border-gray-200">
                 <div className="flex gap-2">
                   <input
@@ -813,12 +809,12 @@ export default function App() {
         )}
       </main>
 
-      {/* Footer */}
+      {/* Подвал */}
       <footer className="mt-12 border-t border-gray-200 bg-white/50">
         <div className="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-gray-500">
-          <p>🇨🇳 AI UniFinder China — Информация актуальна на сентябрь 2026</p>
+          <p>🇨🇳 ИИ-Поиск вузов Китая — Информация актуальна на сентябрь 2026</p>
           <p className="mt-1">⚠️ Всегда проверяйте актуальность данных на официальных сайтах вузов</p>
-          <p className="mt-1">Курс: 1 CNY ≈ {CNY_TO_RUB} RUB</p>
+          <p className="mt-1">Курс: 1 ¥ ≈ {CNY_TO_RUB} ₽</p>
         </div>
       </footer>
     </div>
