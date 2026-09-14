@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { universities, grants, documents, timeline, CNY_TO_RUB, University } from './data/universities';
+import { c9Universities, project985Universities, project211Universities, categoryInfo } from './data/elite-universities';
 
 // ===== УТИЛИТЫ =====
 function toRub(cny: number): string {
@@ -44,7 +45,8 @@ function getChanceColor(chance: number): string {
 
 // ===== ГЛАВНОЕ ПРИЛОЖЕНИЕ =====
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'search' | 'grants' | 'documents' | 'timeline' | 'chat'>('search');
+  const [activeTab, setActiveTab] = useState<'search' | 'elite' | 'grants' | 'documents' | 'timeline' | 'chat'>('search');
+  const [eliteCategory, setEliteCategory] = useState<'C9' | '985' | '211'>('C9');
   const [selectedUni, setSelectedUni] = useState<University | null>(null);
 
   // Фильтры
@@ -123,6 +125,7 @@ export default function App() {
           <nav className="hidden md:flex gap-2">
             {[
               { id: 'search', label: 'Поиск' },
+              { id: 'elite', label: 'Элитные вузы' },
               { id: 'grants', label: 'Гранты' },
               { id: 'documents', label: 'Документы' },
               { id: 'timeline', label: 'План' },
@@ -146,6 +149,7 @@ export default function App() {
         <div className="md:hidden flex gap-1 px-4 pb-2 overflow-x-auto">
           {[
             { id: 'search', label: 'Поиск' },
+            { id: 'elite', label: 'Элитные' },
             { id: 'grants', label: 'Гранты' },
             { id: 'documents', label: 'Документы' },
             { id: 'timeline', label: 'План' },
@@ -583,6 +587,81 @@ export default function App() {
                   Открыть сайт университета →
                 </a>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* ===== ВКЛАДКА ЭЛИТНЫЕ ВУЗЫ ===== */}
+        {activeTab === 'elite' && (
+          <div>
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">Элитные университеты Китая</h2>
+              <p className="text-gray-600">C9, 985 и 211 — лучшие вузы страны с особым статусом и финансированием</p>
+            </div>
+
+            {/* Переключатель категорий */}
+            <div className="flex gap-2 mb-6">
+              {(['C9', '985', '211'] as const).map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => setEliteCategory(cat)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    eliteCategory === cat
+                      ? 'bg-gray-900 text-white'
+                      : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
+                  }`}
+                >
+                  {categoryInfo[cat].nameRu} ({categoryInfo[cat].count})
+                </button>
+              ))}
+            </div>
+
+            {/* Информация о категории */}
+            <div className="bg-white rounded-xl p-6 border border-gray-200 mb-6">
+              <h3 className="font-bold text-gray-900 mb-2">{categoryInfo[eliteCategory].name}</h3>
+              <p className="text-gray-600">{categoryInfo[eliteCategory].description}</p>
+            </div>
+
+            {/* Список университетов */}
+            <div className="grid md:grid-cols-2 gap-4">
+              {(eliteCategory === 'C9' ? c9Universities : 
+                eliteCategory === '985' ? project985Universities : 
+                project211Universities).map(uni => (
+                <div key={uni.id} className="bg-white rounded-xl p-5 border border-gray-200 hover:border-gray-400 transition-all">
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <h4 className="font-semibold text-gray-900">{uni.name}</h4>
+                      <p className="text-sm text-gray-500">{uni.nameZh} • {uni.cityRu}</p>
+                    </div>
+                    <span className={`text-xs px-2 py-1 rounded-full border ${categoryInfo[uni.category].color}`}>
+                      {uni.category}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 mb-3">
+                    <div className="text-center bg-gray-50 rounded-lg p-2">
+                      <div className="text-sm font-semibold text-gray-900">
+                        {typeof uni.qsRanking === 'number' ? `#${uni.qsRanking}` : uni.qsRanking}
+                      </div>
+                      <div className="text-xs text-gray-500">QS рейтинг</div>
+                    </div>
+                    <div className="text-center bg-gray-50 rounded-lg p-2">
+                      <div className="text-sm font-semibold text-gray-900">{uni.costBachelorCNY.toLocaleString()} ¥</div>
+                      <div className="text-xs text-gray-500">{toRub(uni.costBachelorCNY)} ₽/год</div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-1 mb-3">
+                    {uni.specialties.slice(0, 4).map(s => (
+                      <span key={s} className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded">{s}</span>
+                    ))}
+                  </div>
+
+                  <div className="text-xs text-gray-500">
+                    Провинция: {uni.province}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )}
