@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { universities, grants, documents, timeline, CNY_TO_RUB, University } from './data/universities';
-import { c9Universities, project985Universities, project211Universities, categoryInfo } from './data/elite-universities';
+import { c9Universities, project985Universities, project211Universities, categoryInfo, findEliteUniversityInMainDb } from './data/elite-universities';
 
 // ===== УТИЛИТЫ =====
 function toRub(cny: number): string {
@@ -48,6 +48,14 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<'search' | 'elite' | 'grants' | 'documents' | 'timeline' | 'chat'>('search');
   const [eliteCategory, setEliteCategory] = useState<'C9' | '985' | '211'>('C9');
   const [selectedUni, setSelectedUni] = useState<University | null>(null);
+
+  const handleEliteUniClick = (eliteId: number) => {
+    const mainUni = findEliteUniversityInMainDb(eliteId, universities);
+    if (mainUni) {
+      setSelectedUni(mainUni);
+      setActiveTab('search');
+    }
+  };
 
   // Фильтры
   const [specialty, setSpecialty] = useState('');
@@ -627,7 +635,11 @@ export default function App() {
               {(eliteCategory === 'C9' ? c9Universities : 
                 eliteCategory === '985' ? project985Universities : 
                 project211Universities).map(uni => (
-                <div key={uni.id} className="bg-white rounded-xl p-5 border border-gray-200 hover:border-gray-400 transition-all">
+                <div 
+                  key={uni.id} 
+                  onClick={() => handleEliteUniClick(uni.id)}
+                  className="bg-white rounded-xl p-5 border border-gray-200 hover:border-gray-400 transition-all cursor-pointer"
+                >
                   <div className="flex justify-between items-start mb-3">
                     <div>
                       <h4 className="font-semibold text-gray-900">{uni.name}</h4>
@@ -657,11 +669,21 @@ export default function App() {
                     ))}
                   </div>
 
-                  <div className="text-xs text-gray-500">
-                    Провинция: {uni.province}
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-gray-500">Провинция: {uni.province}</span>
+                    {uni.mainDbId && (
+                      <span className="text-gray-400">Подробнее →</span>
+                    )}
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* Подсказка */}
+            <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <p className="text-sm text-gray-600">
+                💡 Нажмите на карточку университета, чтобы увидеть полную информацию о поступлении, стоимости, грантах и шансах.
+              </p>
             </div>
           </div>
         )}
