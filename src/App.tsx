@@ -110,7 +110,7 @@ export default function App() {
     }, 1000);
   };
 
-  const cities = ['Любой', 'Пекин', 'Шанхай', 'Ханчжоу', 'Нанкин', 'Ухань', 'Харбин', 'Сямынь', 'Гуанчжоу', 'Шэньчжэнь', 'Чэнду', 'Сиань', 'Тяньцзинь', 'Цзинань', 'Циндао', 'Шэньян', 'Далянь', 'Чанша', 'Кайфын', 'Хэфэй', 'Куньмин', 'Наньнин', 'Чанчунь', 'Ланьчжоу', 'Гуйян', 'Хайкоу', 'Фучжоу', 'Чжэньцзян'];
+  const cities = ['Любой', 'Пекин', 'Шанхай', 'Ханчжоу', 'Нанкин', 'Ухань', 'Харбин', 'Сямынь', 'Гуанчжоу', 'Шэньчжэнь', 'Чэнду', 'Сиань', 'Тяньцзинь', 'Цзинань', 'Циндао', 'Шэньян', 'Далянь', 'Чанша', 'Кайфын', 'Хэфэй', 'Куньмин', 'Наньнин', 'Чанчунь', 'Ланьчжоу', 'Гуйян', 'Хайкоу', 'Фучжоу', 'Чжэньцзян', 'Фушунь', 'Аньшань', 'Хулудао', 'Цзиньчжоу', 'Даньдун'];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-amber-50">
@@ -324,12 +324,12 @@ export default function App() {
                     <div className="text-xs text-gray-600">Провинции</div>
                   </div>
                   <div className="bg-green-50 rounded-lg p-3 text-center">
-                    <div className="text-2xl font-bold text-green-700">4</div>
-                    <div className="text-xs text-gray-600">Типа грантов</div>
+                    <div className="text-2xl font-bold text-green-700">62</div>
+                    <div className="text-xs text-gray-600">Всего вузов</div>
                   </div>
                   <div className="bg-purple-50 rounded-lg p-3 text-center">
-                    <div className="text-2xl font-bold text-purple-700">1+4</div>
-                    <div className="text-xs text-gray-600">Программа</div>
+                    <div className="text-2xl font-bold text-purple-700">22</div>
+                    <div className="text-xs text-gray-600">Вузов в Ляонине</div>
                   </div>
                 </div>
                 <div className="mt-4 p-3 bg-amber-50 rounded-lg border border-amber-200">
