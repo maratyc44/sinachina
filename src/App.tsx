@@ -159,7 +159,10 @@ export default function App() {
   // Функция для получения городов по провинции
   const getCitiesByProvince = (province: string): string[] => {
     if (province === 'Любая') {
-      return ['Любой', 'Пекин', 'Шанхай', 'Ханчжоу', 'Нанкин', 'Сучжоу', 'Уси', 'Чанчжоу', 'Янчжоу', 'Наньтун', 'Хуайань', 'Яньчэн', 'Чаншу', 'Сюйчжоу', 'Тайчжоу', 'Ляньюньган', 'Ухань', 'Харбин', 'Сямынь', 'Гуанчжоу', 'Шэньчжэнь', 'Чэнду', 'Чунцин', 'Лешань', 'Ибинь', 'Цзигун', 'Мяньян', 'Лучжоу', 'Яань', 'Наньчун', 'Нэйцзян', 'Суйнин', 'Паньчжихуа', 'Дачжоу', 'Сиань', 'Тяньцзинь', 'Цзинань', 'Циндао', 'Шэньян', 'Далянь', 'Чанша', 'Сянтань', 'Кайфын', 'Хэфэй', 'Куньмин', 'Наньнин', 'Гуйлинь', 'Чанчунь', 'Яньцзи', 'Ланьчжоу', 'Гуйян', 'Хайкоу', 'Фучжоу', 'Чжэньцзян', 'Фушунь', 'Аньшань', 'Хулудао', 'Цзиньчжоу', 'Даньдун', 'Баодин', 'Шицзячжуан', 'Тайюань', 'Хух-Хото', 'Синин', 'Иньчуань', 'Урумчи'];
+      const allCities = universities
+        .map(uni => uni.cityRu)
+        .filter((city, index, self) => self.indexOf(city) === index);
+      return ['Любой', ...allCities.sort((a, b) => a.localeCompare(b, 'ru'))];
     }
     
     const citiesInProvince = universities
@@ -167,7 +170,7 @@ export default function App() {
       .map(uni => uni.cityRu)
       .filter((city, index, self) => self.indexOf(city) === index); // Убираем дубликаты
     
-    return ['Любой', ...citiesInProvince.sort()];
+    return ['Любой', ...citiesInProvince.sort((a, b) => a.localeCompare(b, 'ru'))];
   };
 
   const availableCities = getCitiesByProvince(province);
@@ -307,28 +310,9 @@ export default function App() {
                       className="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-red-200 outline-none"
                     >
                       <option>Любая</option>
-                      <option>Пекин</option>
-                      <option>Шанхай</option>
-                      <option>Тяньцзинь</option>
-                      <option>Чжэцзян</option>
-                      <option>Цзянсу</option>
-                      <option>Гуандун</option>
-                      <option>Фуцзянь</option>
-                      <option>Хубэй</option>
-                      <option>Хэйлунцзян</option>
-                      <option>Шэньси</option>
-                      <option>Шаньдун</option>
-                      <option>Ляонин</option>
-                      <option>Хунань</option>
-                      <option>Хэнань</option>
-                      <option>Аньхой</option>
-                      <option>Сычуань</option>
-                      <option>Юньнань</option>
-                      <option>Гуанси</option>
-                      <option>Цзилинь</option>
-                      <option>Ганьсу</option>
-                      <option>Гуйчжоу</option>
-                      <option>Хайнань</option>
+                      {Array.from(new Set(universities.map(u => u.province)))
+                        .sort((a, b) => a.localeCompare(b, 'ru'))
+                        .map(p => <option key={p}>{p}</option>)}
                     </select>
                   </div>
                   <div>
