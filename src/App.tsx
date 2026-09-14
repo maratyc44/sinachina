@@ -776,9 +776,10 @@ export default function App() {
 
             {/* Список университетов */}
             <div className="grid md:grid-cols-2 gap-4">
-              {(eliteCategory === 'C9' ? c9Universities : 
-                eliteCategory === '985' ? project985Universities : 
-                project211Universities).map(uni => (
+              {[...c9Universities, ...project985Universities, ...project211Universities]
+                .filter(uni => uni.category === eliteCategory)
+                .sort((a, b) => a.name.localeCompare(b.name, 'ru'))
+                .map(uni => (
                 <div 
                   key={uni.id} 
                   onClick={() => handleEliteUniClick(uni.id)}

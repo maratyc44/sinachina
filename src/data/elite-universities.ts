@@ -103,15 +103,15 @@ export const categoryInfo = {
   '985': {
     name: 'Project 985',
     nameRu: 'Проект 985',
-    description: '39 элитных университетов Китая',
-    count: 39,
+    description: '21 элитный университет Китая (без учёта C9)',
+    count: 21,
     color: 'bg-orange-100 text-orange-800 border-orange-200'
   },
   '211': {
     name: 'Project 211',
     nameRu: 'Проект 211',
-    description: '115 ключевых университетов Китая',
-    count: 115,
+    description: '35 ключевых университетов Китая (без учёта C9 и 985)',
+    count: 35,
     color: 'bg-blue-100 text-blue-800 border-blue-200'
   }
 };
