@@ -580,10 +580,6 @@ export default function App() {
                       <p className="text-sm font-medium text-gray-800">🌐 Интернет:</p>
                       <p className="text-sm text-gray-700">{selectedUni.internet}</p>
                     </div>
-                    <div className="bg-green-50 rounded-lg p-3">
-                      <p className="text-sm font-medium text-green-800">💼 Подработка:</p>
-                      <p className="text-sm text-green-700">{selectedUni.partTime}</p>
-                    </div>
                   </div>
                 </div>
 
