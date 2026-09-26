@@ -467,35 +467,29 @@ export default function App() {
 
               <div className="p-6 space-y-6">
                 {/* Фото и карта */}
-                {(() => {
-                  const location = getUniversityLocation(selectedUni.id);
-                  if (location) {
-                    return (
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div className="rounded-lg overflow-hidden border border-gray-200">
-                          <img 
-                            src={location.image} 
-                            alt={selectedUni.name}
-                            className="w-full h-64 object-cover"
-                            onError={(e) => {
-                              e.currentTarget.src = `https://source.unsplash.com/800x400/?university,china,campus`;
-                            }}
-                          />
-                        </div>
-                        <div className="rounded-lg overflow-hidden border border-gray-200">
-                          <iframe
-                            title={`Карта ${selectedUni.name}`}
-                            src={getGoogleMapsEmbedUrl(location.lat, location.lng)}
-                            className="w-full h-64 border-0"
-                            loading="lazy"
-                            referrerPolicy="no-referrer-when-downgrade"
-                          ></iframe>
-                        </div>
-                      </div>
-                    );
-                  }
-                  return null;
-                })()}
+                {getUniversityLocation(selectedUni.id) && (
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="rounded-lg overflow-hidden border border-gray-200">
+                      <img 
+                        src={getUniversityLocation(selectedUni.id)!.image} 
+                        alt={selectedUni.name}
+                        className="w-full h-64 object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = `https://source.unsplash.com/800x400/?university,china,campus`;
+                        }}
+                      />
+                    </div>
+                    <div className="rounded-lg overflow-hidden border border-gray-200">
+                      <iframe
+                        title={`Карта ${selectedUni.name}`}
+                        src={getGoogleMapsEmbedUrl(getUniversityLocation(selectedUni.id)!.lat, getUniversityLocation(selectedUni.id)!.lng)}
+                        className="w-full h-64 border-0"
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                      ></iframe>
+                    </div>
+                  </div>
+                )}
 
                 {/* Статистика */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
